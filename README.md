@@ -1,13 +1,13 @@
 # SmashScoreboard
 Open Source Scoreboard Updater, to be used with apps like XSplit or OBS.
 
-##Features
+## Features
 
 * Database for storing player names
 * Autocompletion
 * Fast!
 
-##Usage
+## Usage
 
 Requires ```Python 3+``` and ```TKInter```. Just run the script and fill the data entires. Press the Update button to update and save the changes to the source files. And of course, dont forget to select the corresponding source files in OBS/XSplit/Your favourite software!
 
