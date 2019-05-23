@@ -1,0 +1,14 @@
+Winner Quarters
+Winner Semis
+Winner Finals
+Loser Quarters
+Loser Semis
+Loser Finals
+Grand Finals
+Friendlies
+Winner Bracket
+Loser Bracket
+Crew Battle
+Losers Round 1
+Losers Round 2
+Losers Round 3
