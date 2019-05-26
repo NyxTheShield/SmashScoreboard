@@ -218,7 +218,8 @@ class Application():
 
         #Toggles the windows to stay on top
         global isTop
-        isTop = 0
+        self.raiz.wm_attributes("-topmost", 1)
+        isTop = 1
 
         #Icons
         icon_up = PhotoImage(data=arrow_up).subsample(2,2)
@@ -245,8 +246,8 @@ class Application():
         
         
 
-        #Create a 20x7 (rows x columns) grid of buttons inside the frame
-        for row_index in range(20): #idk how to use TKInter but this works so screw it -LegendaryLee
+        #Create a 5x7 (rows x columns) grid of buttons inside the frame
+        for row_index in range(5):
             Grid.rowconfigure(frame, row_index, weight=1)
             for col_index in range(7):
                 Grid.columnconfigure(frame, col_index, weight=1)
@@ -349,7 +350,7 @@ class Application():
                     btn = Button(frame, command = self.swap, text= "Swap Players", font = "Helvetica 10 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white",image=icon_swap, compound=TOP)
                     btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
                 elif tupla == (6,4):
-                    btn = Button(frame, command = self.top, text= "Toggle Top", font = "Helvetica 10 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white", compound=TOP)
+                    btn = Button(frame, command = self.top, text= "Toggle \nAlways on Top", font = "Helvetica 8 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white", compound=TOP)
                     btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
 
 
@@ -452,9 +453,12 @@ class Application():
             append_to_file("Database/players.txt", p2_name)
         if not exists_in_file("Database/rounds.txt", current_round):
             append_to_file("Database/rounds.txt", current_round)
+        if not exists_in_file("Database/rounds.txt", misc_txt):
+            append_to_file("Database/misc.txt", misc_txt)
         self.autocompletar_rounds.append(current_round)
         self.autocompletar.append(p1_name)
         self.autocompletar.append(p2_name)
+        self.autocompletar_misc.append(misc_txt)
         return
 
     def top(self):
