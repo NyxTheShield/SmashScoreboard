@@ -198,7 +198,7 @@ class Application():
     def __init__(self):
 
         self.raiz = Tk()
-        self.raiz.geometry('800x180')
+        self.raiz.geometry('800x150')
         self.raiz.resizable(width=False,height=False)
         self.raiz.title('SmashScoreboard')
         self.score1 = 0
@@ -217,9 +217,8 @@ class Application():
         center(self.raiz)
 
         #Toggles the windows to stay on top
-        global isTop
         self.raiz.wm_attributes("-topmost", 1)
-        isTop = 1
+        self.isTop = IntVar(value=1)
 
         #Icons
         icon_up = PhotoImage(data=arrow_up).subsample(2,2)
@@ -324,7 +323,7 @@ class Application():
                 elif tupla == (5,2):
                     btn = Button(frame, text = "o", command = self.reset_p2, width = 3, image=icon_repeat, background = "#3398d7", activebackground = "#083c5d")
                     btn.grid(row=row_index, column=col_index, sticky=N+S+E+W)
-                elif tupla == (3,2):
+                elif tupla == (0,2):
                     label = Label(frame, text="Misc", bg = "#1b1b1b", fg="white", font = "Helvetica 10 bold")
                     label.grid(row=row_index, column=col_index, sticky=N+S+E+W)
                     
@@ -338,20 +337,20 @@ class Application():
                 elif tupla == (5,3):
                     btn = Button(frame, text = "-", command = self.substract_p2, image=icon_down, background = "#3398d7", activebackground = "#083c5d")
                     btn.grid(row=row_index, column=col_index, sticky=N+S+E+W)
-                elif tupla == (3,3):
-                    self.misc_entry = AutocompleteEntry(self.autocompletar_misc, frame, listboxLength=4, matchesFunction=matches, justify='center', width=25)
-                    self.misc_entry.grid(row=row_index, column=col_index, sticky=N+S+E+W, padx=20)
+                elif tupla == (0,3):
+                    self.misc_entry = AutocompleteEntry(self.autocompletar_misc, frame, listboxLength=1, matchesFunction=matches, justify='center', width=25)
+                    self.misc_entry.grid(row=row_index, column=col_index, sticky=N+S+E+W, padx=10)
 
                 #=============================================
                 #row 4
                 #=============================================
 
-                elif tupla == (3,4):
+                elif tupla == (3,2):
                     btn = Button(frame, command = self.swap, text= "Swap Players", font = "Helvetica 10 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white",image=icon_swap, compound=TOP)
                     btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
-                elif tupla == (6,4):
-                    btn = Button(frame, command = self.top, text= "Toggle \nAlways on Top", font = "Helvetica 8 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white", compound=TOP)
-                    btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
+                elif tupla == (6,2):
+                    btn = Checkbutton(frame, var = self.isTop, command = self.top, text= "Always on Top", font = "Helvetica 8 bold", overrelief="flat",  background="#1b1b1b", activebackground="#1b1b1b",foreground = "white", activeforeground = "white",selectcolor="black", highlightcolor = "green")
+                    btn.grid(row=row_index, column=col_index,padx=10, sticky=N+S+E+W, rowspan = 2, pady = 10)
 
 
                 
@@ -462,13 +461,12 @@ class Application():
         return
 
     def top(self):
-        global isTop
-        if(isTop == 0):
-                self.raiz.wm_attributes("-topmost", 1)
-                isTop = 1
-        else:
+        print("Called top")
+        print(self.isTop.get())
+        if(self.isTop.get() == 0):
                 self.raiz.wm_attributes("-topmost", 0)
-                isTop = 0
+        else:
+                self.raiz.wm_attributes("-topmost", 1)
         return
  
 def main():
