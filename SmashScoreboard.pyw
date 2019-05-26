@@ -198,7 +198,7 @@ class Application():
     def __init__(self):
 
         self.raiz = Tk()
-        self.raiz.geometry('800x120')
+        self.raiz.geometry('800x180')
         self.raiz.resizable(width=False,height=False)
         self.raiz.title('SmashScoreboard')
         self.score1 = 0
@@ -208,12 +208,17 @@ class Application():
         self.player1_entry = ""
         self.player2_entry = ""
         self.round_entry = ""
+        self.misc_entry = ""
         
         self.autocompletar = list_database("Database/players.txt")
         self.autocompletar_rounds = list_database("Database/rounds.txt")
-        self.raiz.wm_attributes("-topmost", 1)
+        self.autocompletar_misc = list_database("Database/misc.txt")
         
         center(self.raiz)
+
+        #Toggles the windows to stay on top
+        global isTop
+        isTop = 0
 
         #Icons
         icon_up = PhotoImage(data=arrow_up).subsample(2,2)
@@ -236,14 +241,17 @@ class Application():
         #Create & Configure frame 
         frame=Frame(self.raiz, bg="#1b1b1b")
         frame.grid(row=0, column=0, sticky=N+S+E+W)
+
+        
         
 
-        #Create a 5x7 (rows x columns) grid of buttons inside the frame
-        for row_index in range(5):
+        #Create a 20x7 (rows x columns) grid of buttons inside the frame
+        for row_index in range(20): #idk how to use TKInter but this works so screw it -LegendaryLee
             Grid.rowconfigure(frame, row_index, weight=1)
             for col_index in range(7):
                 Grid.columnconfigure(frame, col_index, weight=1)
                 tupla = (col_index, row_index)
+                
                 #=============================================
                 #row 0
                 #=============================================
@@ -316,8 +324,8 @@ class Application():
                     btn = Button(frame, text = "o", command = self.reset_p2, width = 3, image=icon_repeat, background = "#3398d7", activebackground = "#083c5d")
                     btn.grid(row=row_index, column=col_index, sticky=N+S+E+W)
                 elif tupla == (3,2):
-                    btn = Button(frame, command = self.swap, text= "Swap Players", font = "Helvetica 10 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white",image=icon_swap, compound=TOP)
-                    btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
+                    label = Label(frame, text="Misc", bg = "#1b1b1b", fg="white", font = "Helvetica 10 bold")
+                    label.grid(row=row_index, column=col_index, sticky=N+S+E+W)
                     
                 #=============================================
                 #row 3
@@ -329,6 +337,23 @@ class Application():
                 elif tupla == (5,3):
                     btn = Button(frame, text = "-", command = self.substract_p2, image=icon_down, background = "#3398d7", activebackground = "#083c5d")
                     btn.grid(row=row_index, column=col_index, sticky=N+S+E+W)
+                elif tupla == (3,3):
+                    self.misc_entry = AutocompleteEntry(self.autocompletar_misc, frame, listboxLength=4, matchesFunction=matches, justify='center', width=25)
+                    self.misc_entry.grid(row=row_index, column=col_index, sticky=N+S+E+W, padx=20)
+
+                #=============================================
+                #row 4
+                #=============================================
+
+                elif tupla == (3,4):
+                    btn = Button(frame, command = self.swap, text= "Swap Players", font = "Helvetica 10 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white",image=icon_swap, compound=TOP)
+                    btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
+                elif tupla == (6,4):
+                    btn = Button(frame, command = self.top, text= "Toggle Top", font = "Helvetica 10 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white", compound=TOP)
+                    btn.grid(row=row_index, column=col_index,padx=50, sticky=N+S+E+W, rowspan = 2, pady = 10)
+
+
+                
 
         #Big Save Button           
         btn = Button(frame, text = "Update", command = self.save, width = 100, font = "Helvetica 15 bold", background="#563d7c", foreground = "white", overrelief="flat", activebackground="#34254c", activeforeground="white",image=icon_save, compound=TOP)
@@ -406,18 +431,20 @@ class Application():
                                  
         return
     
-    def save(self):
+    def save(self):           
         p1_name = self.player1_entry.get()
         p1_score = self.score1_value.get()
         p2_name = self.player2_entry.get()
         p2_score = self.score2_value.get()
         current_round = self.round_entry.get()
+        misc_txt = self.misc_entry.get();
         
         replace_file("Sources/player1.txt", p1_name)
         replace_file("Sources/player2.txt", p2_name)
         replace_file("Sources/score1.txt", p1_score)
         replace_file("Sources/score2.txt", p2_score)
         replace_file("Sources/round.txt", current_round)
+        replace_file("Sources/misc.txt", misc_txt)
 
         if not exists_in_file("Database/players.txt", p1_name):
             append_to_file("Database/players.txt", p1_name)
@@ -428,6 +455,16 @@ class Application():
         self.autocompletar_rounds.append(current_round)
         self.autocompletar.append(p1_name)
         self.autocompletar.append(p2_name)
+        return
+
+    def top(self):
+        global isTop
+        if(isTop == 0):
+                self.raiz.wm_attributes("-topmost", 1)
+                isTop = 1
+        else:
+                self.raiz.wm_attributes("-topmost", 0)
+                isTop = 0
         return
  
 def main():
